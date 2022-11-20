@@ -1,9 +1,9 @@
 export interface AppTitleProps {
   title?: string;
+  rootTitle: string;
 }
 
-export const AppTitle = ({ title }: AppTitleProps) => {
-  const rootTitle = 'Freaking Out Father';
+export const AppTitle = ({ title, rootTitle }: AppTitleProps) => {
   const titleParts = [];
   if (title) {
     titleParts.push(title);

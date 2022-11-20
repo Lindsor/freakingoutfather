@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { AppDescription, AppDescriptionProps } from './AppDescription';
 import { AppIcon, AppIconProps } from './AppIcon';
-import { AppPWA } from './AppPWA';
+import { AppPWA, AppPWAProps } from './AppPWA';
 import { AppTitle, AppTitleProps } from './AppTitle';
 
 import favicon from './favicon/favicon.ico';
@@ -9,18 +9,20 @@ import favicon16 from './favicon/favicon-16x16.png';
 import favicon32 from './favicon/favicon-32x32.png';
 import apple180 from './favicon/apple-touch-icon.png';
 import safariPinnedTab from './favicon/safari-pinned-tab.svg';
+import { themeColor } from '../AppTheme/AppTheme';
+
+export const rootTitle = 'Freaking Out Father';
 
 export interface AppHeadProps
-  extends AppTitleProps,
+  extends Partial<AppTitleProps>,
     AppDescriptionProps,
-    Partial<AppIconProps> {}
+    Partial<AppIconProps>,
+    Partial<AppPWAProps> {}
 
 export const AppHead = ({ title, description }: AppHeadProps) => {
-  const themeColor = '#f8b500';
-
   return (
     <Head>
-      <AppTitle title={title} />
+      <AppTitle title={title} rootTitle={rootTitle} ƒ />
       <AppDescription description={description} />
       <AppIcon
         icons={[
