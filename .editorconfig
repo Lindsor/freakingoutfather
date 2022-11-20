@@ -13,7 +13,7 @@ insert_final_newline = false
 
 # Matches multiple files with brace expansion notation
 # Set default charset
-[*.{js,jsx,ts,tsx,mjs,css,scss,json,yml,yaml,html,conf}]
+[*.{js,jsx,ts,tsx,mjs,css,scss,json,yml,yaml,html,conf,xml,webmanifest}]
 charset = utf-8
 indent_size = 2
 indent_style = space
