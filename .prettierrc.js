@@ -8,4 +8,5 @@ module.exports = exports = {
   bracketSpacing: true,
   bracketSameLine: false,
   printWidth: 80,
+  parser: 'babel',
 };

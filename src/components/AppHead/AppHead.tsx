@@ -22,7 +22,7 @@ export interface AppHeadProps
 export const AppHead = ({ title, description }: AppHeadProps) => {
   return (
     <Head>
-      <AppTitle title={title} rootTitle={rootTitle} ƒ />
+      <AppTitle title={title} rootTitle={rootTitle} />
       <AppDescription description={description} />
       <AppIcon
         icons={[

@@ -1,4 +1,4 @@
-import { PostData as StartsWithJokeData } from './it-all-starts-with-a-joke';
+import { PostData as StartsWithJokeData } from './it-all-starts-with-a-joke/index.page';
 
 export interface BlogPostData {
   href: string;
