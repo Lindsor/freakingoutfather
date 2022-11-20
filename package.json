@@ -8,8 +8,7 @@
     "export": "rm -rf out && npm run metadata && npm run build && next export",
     "start": "next start",
     "lint": "next lint",
-    "metadata": "node ./bin/generate-page-metadata.mjs",
-    "sitemap": "next-sitemap"
+    "metadata": "node ./bin/generate-page-metadata.mjs"
   },
   "dependencies": {
     "@nextui-org/react": "1.0.0-beta.10",

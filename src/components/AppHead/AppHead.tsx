@@ -55,6 +55,12 @@ export const AppHead = ({ title, description }: AppHeadProps) => {
         ]}
       />
       <AppPWA themeColor={themeColor} />
+      <link
+        rel="sitemap"
+        type="application/xml"
+        title="Sitemap"
+        href="/public/sitemap.xml"
+      />
     </Head>
   );
 };
