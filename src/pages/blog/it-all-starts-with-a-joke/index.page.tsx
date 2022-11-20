@@ -1,15 +1,21 @@
 import { AppHead } from '../../../components/AppHead/AppHead';
 import styles from './StartsWithJoke.module.scss';
+import { PageMetaData } from './_PageMetaData';
 
 export const PostData = {
-  title: 'Day 0: It All Starts With a Joke',
+  title: 'Day 1: It All Starts With a Joke',
   slug: 'it-all-starts-with-a-joke',
 };
 
 export default function StartsWithJoke() {
   return (
     <>
-      <AppHead title={PostData.title} />
+      <AppHead
+        title={PostData.title}
+        createdAt={PageMetaData.createdAt}
+        modifiedAt={PageMetaData.modifiedAt}
+        pageUrl={PageMetaData.pageUrl}
+      />
 
       <main className={styles.main}>
         <h1 className={styles.title}>{PostData.title}</h1>

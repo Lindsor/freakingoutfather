@@ -4,22 +4,33 @@ import { AppIcon, AppIconProps } from './AppIcon';
 import { AppPWA, AppPWAProps } from './AppPWA';
 import { AppTitle, AppTitleProps } from './AppTitle';
 
+import { Env } from '../../env';
+
 import favicon from './favicon/favicon.ico';
 import favicon16 from './favicon/favicon-16x16.png';
 import favicon32 from './favicon/favicon-32x32.png';
 import apple180 from './favicon/apple-touch-icon.png';
 import safariPinnedTab from './favicon/safari-pinned-tab.svg';
 import { themeColor } from '../AppTheme/AppTheme';
+import { AppPageMicrodata } from './AppPageMicrodata';
+import logoTransparent from '../../images/logo-transparent.png';
+import { IPageMetaData } from '../../IPageMetaData';
 
 export const rootTitle = 'Freaking Out Father';
 
-export interface AppHeadProps
-  extends Partial<AppTitleProps>,
-    AppDescriptionProps,
-    Partial<AppIconProps>,
-    Partial<AppPWAProps> {}
+export type AppHeadProps = Partial<AppTitleProps> &
+  AppDescriptionProps &
+  Partial<AppIconProps> &
+  Partial<AppPWAProps> &
+  Omit<IPageMetaData, 'pagePath'>;
 
-export const AppHead = ({ title, description }: AppHeadProps) => {
+export const AppHead = ({
+  title,
+  description,
+  createdAt,
+  modifiedAt,
+  pageUrl,
+}: AppHeadProps) => {
   return (
     <Head>
       <AppTitle title={title} rootTitle={rootTitle} />
@@ -60,6 +71,17 @@ export const AppHead = ({ title, description }: AppHeadProps) => {
         type="application/xml"
         title="Sitemap"
         href="/public/sitemap.xml"
+      />
+      <AppPageMicrodata
+        type="BlogPosting"
+        description={description}
+        image={undefined}
+        authorName={rootTitle}
+        siteUrl={Env.siteUrl || ''}
+        pageUrl={pageUrl}
+        siteLogo={logoTransparent}
+        createdAt={createdAt}
+        modifiedAt={modifiedAt}
       />
     </Head>
   );

@@ -11,6 +11,7 @@ export const AppTitle = ({ title, rootTitle }: AppTitleProps) => {
   titleParts.push(rootTitle);
 
   const pageTitle = titleParts.filter(Boolean).join(' | ');
+  console.log(pageTitle);
 
   return (
     <>

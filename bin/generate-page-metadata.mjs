@@ -9,21 +9,27 @@ const __dirname = new URL('.', import.meta.url).pathname;
 const pagesRoot = resolve(__dirname, '..', 'src', 'pages');
 const pagesGlob = resolve(__dirname, '..', 'src', 'pages', '**', '*.page.tsx');
 const publicDirectory = resolve(__dirname, '..', 'public');
+const iMetaFilePath = resolve(__dirname, '..', 'src', 'IPageMetaData.ts');
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 const pageFiles = await glob(pagesGlob);
 
-const getPageMetaDataContent = ({ createdAt, modifiedAt }) =>
+const getPageMetaDataContent = ({
+  createdAt,
+  modifiedAt,
+  importPath,
+  pageUrl,
+  pagePath,
+}) =>
   prettier.format(
     `
-      interface IPageMetaData {
-        createdAt: string;
-        modifiedAt: string;
-      }
+      import { IPageMetaData } from '${importPath.replace('.ts', '')}';
 
       export const PageMetaData: IPageMetaData = {
         createdAt: '${createdAt}',
         modifiedAt: '${modifiedAt}',
+        pageUrl: '${pageUrl}',
+        pagePath: '${pagePath}',
       };
     `,
     prettierrc,
@@ -31,11 +37,9 @@ const getPageMetaDataContent = ({ createdAt, modifiedAt }) =>
 
 const getSitemapContent = (pageMetaDatas) => {
   const urls = pageMetaDatas.map((pageMetaData) => {
-    const pagePath = pageMetaData.pagePublicPath || '/';
-
     return `
       <url>
-        <loc>${siteUrl}${pagePath}</loc>
+        <loc>${pageMetaData.pageUrl}</loc>
         <lastmod>${pageMetaData.modifiedAt}</lastmod>
       </url>
     `.trim();
@@ -55,19 +59,34 @@ const fileMetaDatas = await Promise.all(
   pageFiles.map(async (pagePath) => {
     const pageRootDirectory = dirname(pagePath);
     const pageMetaFilePath = resolve(pageRootDirectory, '_PageMetaData.ts');
-    const pagePublicPath = pageRootDirectory.replace(pagesRoot, '');
+    const pagePublicPath = pageRootDirectory.replace(pagesRoot, '') || '/';
+    const iPageMetaDataImportPath = relative(pageRootDirectory, iMetaFilePath);
 
     let { birthtime: createdAt, mtime: modifiedAt } = await fs.stat(pagePath);
     createdAt = createdAt.toISOString();
     modifiedAt = modifiedAt.toISOString();
 
+    const pageUrl = `${siteUrl}${pagePublicPath}`;
+
     await fs.writeFile(
       pageMetaFilePath,
-      getPageMetaDataContent({ createdAt, modifiedAt }),
+      getPageMetaDataContent({
+        createdAt,
+        modifiedAt,
+        importPath: iPageMetaDataImportPath,
+        pageUrl,
+        pagePath: pagePublicPath,
+      }),
       'utf-8',
     );
 
-    return { pagePublicPath, pageMetaFilePath, createdAt, modifiedAt };
+    return {
+      pagePublicPath,
+      pageMetaFilePath,
+      createdAt,
+      modifiedAt,
+      pageUrl,
+    };
   }),
 );
 

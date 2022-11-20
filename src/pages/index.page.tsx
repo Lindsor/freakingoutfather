@@ -4,11 +4,16 @@ import { AppHead, rootTitle } from '../components/AppHead/AppHead';
 import heroImage from '../images/freaking-out-father-hero.png';
 import { BlogPostData, postsData } from './blog/posts.data';
 import Link from 'next/link';
+import { PageMetaData } from './_PageMetaData';
 
 export default function Home() {
   return (
     <>
-      <AppHead />
+      <AppHead
+        createdAt={PageMetaData.createdAt}
+        modifiedAt={PageMetaData.modifiedAt}
+        pageUrl={PageMetaData.pageUrl}
+      />
 
       <header>
         <Image
