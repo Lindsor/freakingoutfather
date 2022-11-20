@@ -9,6 +9,7 @@ const __dirname = new URL('.', import.meta.url).pathname;
 const pagesRoot = resolve(__dirname, '..', 'src', 'pages');
 const pagesGlob = resolve(__dirname, '..', 'src', 'pages', '**', '*.page.tsx');
 const publicDirectory = resolve(__dirname, '..', 'public');
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 const pageFiles = await glob(pagesGlob);
 
@@ -30,23 +31,24 @@ const getPageMetaDataContent = ({ createdAt, modifiedAt }) =>
 
 const getSitemapContent = (pageMetaDatas) => {
   const urls = pageMetaDatas.map((pageMetaData) => {
-
     const pagePath = pageMetaData.pagePublicPath || '/';
 
     return `
       <url>
-        <loc>${process.env.NEXT_PUBLIC_SITE_URL}${pagePath}</loc>
+        <loc>${siteUrl}${pagePath}</loc>
         <lastmod>${pageMetaData.modifiedAt}</lastmod>
       </url>
     `.trim();
   });
 
-  return `
-    <?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${urls.join('\n')}
-    </urlset>
-  `.trim();
+  return (
+    `
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${urls.join('\n')}
+</urlset>
+  `.trim() + '\n'
+  );
 };
 
 const fileMetaDatas = await Promise.all(
@@ -78,10 +80,27 @@ fileMetaDatas.sort((page1, page2) => {
   return 1;
 });
 
-await fs.writeFile(
-  resolve(publicDirectory, 'sitemap.xml'),
-  getSitemapContent(fileMetaDatas),
-  'utf-8',
-);
+await Promise.all([
+  fs.writeFile(
+    resolve(publicDirectory, 'sitemap.xml'),
+    getSitemapContent(fileMetaDatas),
+    'utf-8',
+  ),
+  fs.writeFile(
+    resolve(publicDirectory, 'robots.txt'),
+    `
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: ${siteUrl}
+
+# Sitemaps
+Sitemap: ${siteUrl}/public/sitemap.xml
+    `.trim() + '\n',
+    'utf-8',
+  ),
+]);
 
 console.log(fileMetaDatas);
