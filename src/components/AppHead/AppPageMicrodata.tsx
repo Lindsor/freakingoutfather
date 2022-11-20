@@ -61,11 +61,20 @@ export const AppPageMicrodata = ({
   };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(microData, undefined, Env.isDev ? 2 : undefined),
-      }}
-    ></script>
+    <>
+      <link rel="canonical" href={pageUrl} />
+      {authorName ? <meta name="author" content={authorName} /> : null}
+      {authorName ? <meta name="copyright" content={authorName} /> : null}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            microData,
+            undefined,
+            Env.isDev ? 2 : undefined,
+          ),
+        }}
+      ></script>
+    </>
   );
 };
